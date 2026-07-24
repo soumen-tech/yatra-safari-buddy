@@ -8,12 +8,12 @@ export const Route = createFileRoute("/city/$slug")({
     const city = getCityBySlug(params.slug);
     return {
       meta: [
-        { title: city ? `${city.name} — YatraAI` : "City — YatraAI" },
+        { title: city ? `${city.name} — YATRA` : "City — YATRA" },
         {
           name: "description",
           content: city
-            ? `${city.tag} — Popular spots, hidden gems, and real budgets for ${city.name.toLowerCase()}. From ${city.budget.perDay}/day.`
-            : "Explore an Indian city with YatraAI.",
+            ? `${city.tagline} Explore ${city.name} on a budget with YATRA.`
+            : "Explore an Indian city with YATRA.",
         },
       ],
     };
@@ -193,7 +193,7 @@ function CityDetailPage() {
             PLAN YOUR {city.name} TRIP
           </h2>
           <p className="mt-3 text-lg">
-            From {city.budget.perDay}/day. YatraAI builds a day-by-day itinerary
+            From {city.budget.perDay}/day. YATRA builds a day-by-day itinerary
             around your budget.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">

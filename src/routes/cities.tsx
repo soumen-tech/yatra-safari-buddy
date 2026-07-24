@@ -8,7 +8,7 @@ export const Route = createFileRoute("/cities")(
   {
     head: () => ({
       meta: [
-        { title: "Cities — YatraAI" },
+        { title: "Cities — YATRA" },
         {
           name: "description",
           content:
@@ -39,7 +39,7 @@ function CitiesPage() {
             CITIES
           </h1>
           <p className="mt-3 max-w-xl text-lg text-[var(--cream)]/85">
-            Every city YatraAI knows becomes a poster. Local vehicles, local
+            Every city YATRA knows becomes a poster. Local vehicles, local
             landmarks, local prices — built by locals, not scraped from a wiki.
           </p>
 
@@ -141,7 +141,7 @@ function CitiesPage() {
             PICK A CITY. SET A BUDGET.
           </h2>
           <p className="mt-3 text-lg">
-            YatraAI builds the trip around your wallet, not the other way round.
+            YATRA builds the trip around your wallet, not the other way round.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link to="/trip-generator" className="btn-poster">

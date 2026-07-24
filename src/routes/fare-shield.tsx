@@ -5,11 +5,11 @@ import { PageShell, Halftone, StampTag } from "@/components/yatra";
 export const Route = createFileRoute("/fare-shield")({
   head: () => ({
     meta: [
-      { title: "Fare-Shield™ — YatraAI" },
+      { title: "Fare-Shield™ — YATRA" },
       {
         name: "description",
         content:
-          "Know the fair fare before you sit in the auto. YatraAI's overcharge detector with counter-offer phrases.",
+          "Know the fair fare before you sit in the auto. YATRA's overcharge detector with counter-offer phrases.",
       },
     ],
   }),

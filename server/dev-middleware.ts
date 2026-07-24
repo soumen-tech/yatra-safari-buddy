@@ -393,7 +393,7 @@ export function apiDevMiddleware(): Plugin {
           const hotelsList = hotels.map((h) => `{"name":"${h.name}","type":"${h.type}","description":"${h.description}","priceRange":"${h.priceRange}","rating":"${h.rating}","bookingTip":"${h.bookingTip}"}`).join(",\n");
 
           const prompt = requestJsonOutput(
-            `You are YatraAI, India's most intelligent budget travel assistant. Generate a detailed ${numDays}-day itinerary for a trip from ${origin}, ${origin_state} to ${destination}, ${destination_state}.
+            `You are YATRA, India's most intelligent budget travel assistant. Generate a detailed ${numDays}-day itinerary for a trip from ${origin}, ${origin_state} to ${destination}, ${destination_state}.
 
 BUDGET: ₹${budMin.toLocaleString("en-IN")}–₹${budMax.toLocaleString("en-IN")} total (₹${perDay}–₹${Math.floor(perDay * 1.05)} per person per day).
 PARTY: ${numParty} person${numParty > 1 ? "s" : ""} (${budget_mode} mode).

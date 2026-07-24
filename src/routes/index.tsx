@@ -12,13 +12,13 @@ import goa from "@/assets/poster-goa.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "YatraAI — Travel India Smart, Safe, Cheap" },
+      { title: "YATRA — Travel India Smart, Safe, Cheap" },
       {
         name: "description",
         content:
-          "Gemma-powered AI travel co-pilot for budget & solo travelers in India. Plan trips on any budget, dodge overcharges, translate dialects, stay safe.",
+          "YATRA builds the trip around your wallet — budget trip generator, Fare-Shield, group expense splitter & dialect bargaining co-pilot.",
       },
-      { property: "og:title", content: "YatraAI — Travel India Smart, Safe, Cheap" },
+      { property: "og:title", content: "YATRA — Travel India Smart, Safe, Cheap" },
       {
         property: "og:description",
         content:
@@ -87,7 +87,7 @@ const featureGroups: {
     items: [
       {
         name: "Budget-First Trip Generator",
-        blurb: "Tell YatraAI what's in your wallet. It builds the trip around ₹, and supports group sizes.",
+        blurb: "Tell YATRA what's in your wallet. It builds the trip around ₹, and supports group sizes.",
       },
       {
         name: "Got ₹X and a Few Hours?",
@@ -147,7 +147,7 @@ function Nav() {
             Y
           </span>
           <span className="font-[family-name:var(--font-heavy)] text-lg tracking-widest">
-            YATRA<span className="text-[var(--hotpink)]">AI</span>
+            YATRA
           </span>
         </a>
         <nav className="hidden gap-6 text-sm font-bold uppercase tracking-widest md:flex">
@@ -182,12 +182,12 @@ function Hero() {
             <StampTag tone="pink">Made for India</StampTag>
             <StampTag tone="dusk">Offline-first</StampTag>
           </div>
-          <h1 className="poster-title-lg text-[clamp(3.5rem,11vw,9rem)]">YATRA<span className="block sm:inline">AI</span></h1>
+            YATRA
           <p className="mt-3 max-w-xl text-lg font-bold uppercase tracking-widest text-[var(--cream)] sm:text-xl">
             The co-pilot for travelers who count every rupee — and every hour of daylight.
           </p>
           <p className="mt-4 max-w-xl text-base text-[var(--cream)]/85 sm:text-lg">
-            Every other travel app monetizes travelers who've already decided to spend. YatraAI is
+            Every other travel app monetizes travelers who've already decided to spend. YATRA is
             for the student, the solo woman, the migrant worker, the six-friend bachelor group —
             the traveler deciding if they can afford to go at all. And helping them go safely.
           </p>
@@ -258,7 +258,7 @@ function Manifesto() {
             Booking engines, luxury filters, "hidden gems" curated by influencers. Great for them.
           </p>
           <p className="font-bold">
-            YatraAI is for the other India — the one that travels on general coaches, negotiates
+            YATRA is for the other India — the one that travels on general coaches, negotiates
             every fare, and needs to know if a lane is safe at 10pm.
           </p>
           <p>
@@ -282,7 +282,7 @@ function Cities() {
             <StampTag tone="mustard">The Gallery</StampTag>
             <h2 className="poster-title mt-4 text-[clamp(3rem,8vw,6rem)]">CITIES</h2>
             <p className="mt-2 max-w-xl text-[var(--cream)]/80">
-              Every city YatraAI knows becomes a poster. Local vehicles, local landmarks, local prices —
+              Every city YATRA knows becomes a poster. Local vehicles, local landmarks, local prices —
               built by locals, not scraped from a wiki.
             </p>
           </div>
@@ -682,7 +682,7 @@ function Footer() {
         <div className="flex items-center gap-3">
           <span className="grid h-9 w-9 place-items-center border-[3px] border-[var(--ink)] bg-[var(--hotpink)] font-[family-name:var(--font-heavy)] text-[var(--mustard)] shadow-[3px_3px_0_var(--ink)]">Y</span>
           <div>
-            <div className="font-[family-name:var(--font-heavy)] tracking-widest">YATRAAI</div>
+            <div className="font-[family-name:var(--font-heavy)] tracking-widest">YATRA</div>
             <div className="text-xs text-muted-foreground">Made in India, for India. Powered by Gemma.</div>
           </div>
         </div>

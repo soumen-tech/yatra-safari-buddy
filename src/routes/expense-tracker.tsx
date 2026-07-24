@@ -7,7 +7,7 @@ import { useRealtimeTripUpdates } from "@/hooks/useRealtime";
 export const Route = createFileRoute("/expense-tracker")({
   head: () => ({
     meta: [
-      { title: "Group Expense Splitter — YatraAI" },
+      { title: "Group Expense Splitter — YATRA" },
       {
         name: "description",
         content:

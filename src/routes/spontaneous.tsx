@@ -6,7 +6,7 @@ import { cities } from "@/data/city-data";
 export const Route = createFileRoute("/spontaneous")({
   head: () => ({
     meta: [
-      { title: "Got ₹X & a Few Hours? — YatraAI" },
+      { title: "Got ₹X & a Few Hours? — YATRA" },
       {
         name: "description",
         content: "Spontaneous same-day micro-decisions for budget travelers in India. Tell us what's in your pocket, we tell you what to do nearby.",

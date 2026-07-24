@@ -9,8 +9,8 @@ export function Footer() {
             Y
           </span>
           <div>
-            <div className="font-[family-name:var(--font-heavy)] tracking-widest">
-              YATRAAI
+            <div className="font-[family-name:var(--font-heavy)] tracking-widest text-base">
+              YATRA
             </div>
             <div className="text-xs text-muted-foreground">
               Made in India, for India. Powered by Gemma.
@@ -28,7 +28,7 @@ export function Footer() {
       </div>
       <div className="mx-auto mt-6 max-w-7xl border-t-2 border-dashed border-[var(--ink)] px-4 pt-4 sm:px-6">
         <p className="text-xs text-muted-foreground">
-          © 2025 YatraAI. Every rupee counts. Every traveler matters.
+          © 2025 YATRA. Every rupee counts. Every traveler matters.
         </p>
       </div>
     </footer>

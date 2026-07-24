@@ -5,7 +5,7 @@ import { PageShell, Halftone, StampTag } from "@/components/yatra";
 export const Route = createFileRoute("/features")({
   head: () => ({
     meta: [
-      { title: "Features & Emergency Assistance — YatraAI" },
+      { title: "Features & Emergency Assistance — YATRA" },
       {
         name: "description",
         content:
@@ -45,7 +45,7 @@ const bargainingPhrases = [
 const safetyScenarios = [
   {
     query: "Is it safe to walk near Sealdah station at 10:30 PM?",
-    response: "🚨 YatraAI Safety Guard: Sealdah is heavily crowded but gets chaotic after 10 PM. Stick to the main paved road under the flyover. Do NOT enter the dark side alleyways behind the bus depots. If you feel uneasy, walk into the main station platform area — it is brightly lit and has 24/7 police presence.",
+    response: "🚨 YATRA Safety Guard: Sealdah is heavily crowded but gets chaotic after 10 PM. Stick to the main paved road under the flyover. Do NOT enter the dark side alleyways behind the bus depots. If you feel uneasy, walk into the main station platform area — it is brightly lit and has 24/7 police presence.",
   },
   {
     query: "Auto driver says 'meter is broken' at Howrah. What do I do?",

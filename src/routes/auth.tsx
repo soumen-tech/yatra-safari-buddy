@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign In / Private Document Vault — YatraAI" },
+      { title: "Sign In / Private Document Vault — YATRA" },
       {
         name: "description",
         content: "Sign in or store your private travel documents (Passport, Visa, Tickets) in your encrypted profile vault.",

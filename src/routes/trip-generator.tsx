@@ -5,11 +5,11 @@ import { PageShell, Halftone, StampTag } from "@/components/yatra";
 export const Route = createFileRoute("/trip-generator")({
   head: () => ({
     meta: [
-      { title: "Budget Trip Generator — YatraAI" },
+      { title: "Budget Trip Generator — YATRA" },
       {
         name: "description",
         content:
-          "Plan your trip from state to state. Real routes, proper hotel names, genuine hidden gems, and budget range planning. Powered by Gemma AI.",
+          "Plan your trip from state to state. Real routes, proper hotel names, genuine hidden gems, and budget range planning. Powered by YATRA.",
       },
     ],
   }),
@@ -969,7 +969,7 @@ function TripGeneratorPage() {
             {/* Share Actions */}
             <div className="flex flex-wrap justify-center gap-3 pt-4">
               <a
-                href={`https://wa.me/?text=${encodeURIComponent(`YatraAI Trip: ${originCity} → ${destinationCity} | ${days} days | ₹${budgetMin.toLocaleString("en-IN")}–₹${budgetMax.toLocaleString("en-IN")} budget | ${budgetMode === "group" ? `Group of ${partySize}` : "Solo"} | Trip Code: ${inviteCode ?? ""} | Plan yours at yatraai.in`)}`}
+                href={`https://wa.me/?text=${encodeURIComponent(`YATRA Trip: ${originCity} → ${destinationCity} | ${days} days | ₹${budgetMin.toLocaleString("en-IN")}–₹${budgetMax.toLocaleString("en-IN")} budget | ${budgetMode === "group" ? `Group of ${partySize}` : "Solo"} | Trip Code: ${inviteCode ?? ""}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-poster"

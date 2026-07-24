@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "YatraAI — Travel India Smart, Safe, Cheap" },
+      { title: "YATRA — Travel India Smart, Safe, Cheap" },
       {
         name: "description",
         content:
-          "YatraAI is a Gemma-powered travel co-pilot for budget & solo travelers in India — trip planning, Fare-Shield overcharge detection, silent SOS, and dialect-aware translation.",
+          "YATRA is a Gemma-powered travel co-pilot for budget & solo travelers in India — trip planning, Fare-Shield overcharge detection, silent SOS, and dialect-aware translation.",
       },
-      { property: "og:title", content: "YatraAI — Travel India Smart, Safe, Cheap" },
+      { property: "og:title", content: "YATRA — Travel India Smart, Safe, Cheap" },
       {
         property: "og:description",
         content: "An AI co-pilot for budget, solo & group travelers across India.",

@@ -22,8 +22,8 @@ export function Nav() {
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-sm border-[3px] border-[var(--ink)] bg-[var(--hotpink)] font-[family-name:var(--font-heavy)] text-[var(--mustard)] shadow-[3px_3px_0_var(--ink)]">
             Y
           </span>
-          <span className="font-[family-name:var(--font-heavy)] text-lg tracking-widest">
-            YATRA<span className="text-[var(--hotpink)]">AI</span>
+          <span className="font-[family-name:var(--font-heavy)] text-xl tracking-widest text-[var(--ink)]">
+            YATRA
           </span>
         </Link>
 
@@ -84,7 +84,7 @@ export function Nav() {
           {/* Mobile menu toggle */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="grid h-9 w-9 place-items-center border-[3px] border-[var(--ink)] bg-[var(--mustard)] font-[family-name:var(--font-heavy)] text-sm shadow-[3px_3px_0_var(--ink)] md:hidden"
+            className="grid h-9 w-9 place-items-center border-[3px] border-[var(--ink)] bg-[var(--mustard)] font-[family-name:var(--font-heavy)] text-sm shadow-[3px_3px_0_var(--ink)] md:hidden cursor-pointer"
             aria-label="Toggle menu"
           >
             {menuOpen ? "✕" : "☰"}
@@ -127,7 +127,7 @@ export function Nav() {
                     setMenuOpen(false);
                     handleLogout();
                   }}
-                  className="text-left font-[family-name:var(--font-heavy)] text-xs text-[var(--hotpink)] uppercase tracking-widest"
+                  className="text-left font-[family-name:var(--font-heavy)] text-xs text-[var(--hotpink)] uppercase tracking-widest cursor-pointer"
                 >
                   Log Out
                 </button>
