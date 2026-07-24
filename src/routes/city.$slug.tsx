@@ -12,7 +12,7 @@ export const Route = createFileRoute("/city/$slug")({
         {
           name: "description",
           content: city
-            ? `${city.tagline} Explore ${city.name} on a budget with YATRA.`
+            ? `${city.tag} — Explore ${city.name} on a budget with YATRA.`
             : "Explore an Indian city with YATRA.",
         },
       ],
