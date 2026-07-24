@@ -261,7 +261,7 @@ function TripGeneratorPage() {
               <div className="mt-4 border-2 border-[var(--ink)] bg-[var(--hotpink)] text-[var(--cream)] px-4 py-3 text-xs font-bold uppercase tracking-widest">
                 ⚠️ {aiError}
                 <div className="mt-1 text-[10px] font-normal normal-case">
-                  Make sure GROQ_API_KEY is set in .env.local and the server is running.
+                  Make sure GOOGLE_API_KEY is set in .env.local and the dev server is running.
                 </div>
               </div>
             )}
@@ -471,7 +471,7 @@ function TripGeneratorPage() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <div className="stamp-card inline-block">
             <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest text-muted-foreground">
-              ⚡ Powered by Gemma via Groq — Real AI reasoning, not a lookup table. Results saved to Supabase for group sharing.
+              ⚡ Powered by Google Gemma 4 AI — Real AI reasoning, not a lookup table. Results saved to Supabase for group sharing.
             </span>
           </div>
         </div>

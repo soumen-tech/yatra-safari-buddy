@@ -205,7 +205,7 @@ function SpontaneousPage() {
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
           <div className="stamp-card inline-block">
             <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest text-muted-foreground">
-              ⚡ Powered by Gemma via Groq — Real AI micro-plans, not a lookup table. Updated in real-time based on your budget and hours.
+              ⚡ Powered by Google Gemma 4 AI — Real AI micro-plans, not a lookup table. Updated in real-time based on your budget and hours.
             </span>
           </div>
         </div>

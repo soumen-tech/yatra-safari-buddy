@@ -36,10 +36,13 @@ export default defineEventHandler(async () => {
     results.groq = "unreachable";
   }
 
-  // Check Google AI Studio
+  // Check Google AI (GOOGLE_API_KEY or GOOGLE_AI_STUDIO_KEY)
   try {
-    const googleKey = process.env["GOOGLE_AI_STUDIO_KEY"] ?? "";
-    if (!googleKey || googleKey.includes("YOUR_GOOGLE")) {
+    const googleKey =
+      process.env["GOOGLE_API_KEY"] ??
+      process.env["GOOGLE_AI_STUDIO_KEY"] ??
+      "";
+    if (!googleKey || googleKey.startsWith("YOUR_GOOGLE")) {
       results.google = "not_configured";
     } else {
       const res = await fetch(
