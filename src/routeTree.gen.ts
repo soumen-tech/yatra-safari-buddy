@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CitiesRouteImport } from './routes/cities'
+import { Route as ExpenseTrackerRouteImport } from './routes/expense-tracker'
+import { Route as FareShieldRouteImport } from './routes/fare-shield'
+import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as TripGeneratorRouteImport } from './routes/trip-generator'
+import { Route as TripStoryRouteImport } from './routes/trip-story'
+import { Route as CitySlugRouteImport } from './routes/city.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CitiesRoute = CitiesRouteImport.update({
+  id: '/cities',
+  path: '/cities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpenseTrackerRoute = ExpenseTrackerRouteImport.update({
+  id: '/expense-tracker',
+  path: '/expense-tracker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FareShieldRoute = FareShieldRouteImport.update({
+  id: '/fare-shield',
+  path: '/fare-shield',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TripGeneratorRoute = TripGeneratorRouteImport.update({
+  id: '/trip-generator',
+  path: '/trip-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TripStoryRoute = TripStoryRouteImport.update({
+  id: '/trip-story',
+  path: '/trip-story',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CitySlugRoute = CitySlugRouteImport.update({
+  id: '/city/$slug',
+  path: '/city/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cities': typeof CitiesRoute
+  '/expense-tracker': typeof ExpenseTrackerRoute
+  '/fare-shield': typeof FareShieldRoute
+  '/features': typeof FeaturesRoute
+  '/trip-generator': typeof TripGeneratorRoute
+  '/trip-story': typeof TripStoryRoute
+  '/city/$slug': typeof CitySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cities': typeof CitiesRoute
+  '/expense-tracker': typeof ExpenseTrackerRoute
+  '/fare-shield': typeof FareShieldRoute
+  '/features': typeof FeaturesRoute
+  '/trip-generator': typeof TripGeneratorRoute
+  '/trip-story': typeof TripStoryRoute
+  '/city/$slug': typeof CitySlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cities': typeof CitiesRoute
+  '/expense-tracker': typeof ExpenseTrackerRoute
+  '/fare-shield': typeof FareShieldRoute
+  '/features': typeof FeaturesRoute
+  '/trip-generator': typeof TripGeneratorRoute
+  '/trip-story': typeof TripStoryRoute
+  '/city/$slug': typeof CitySlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/cities'
+    | '/expense-tracker'
+    | '/fare-shield'
+    | '/features'
+    | '/trip-generator'
+    | '/trip-story'
+    | '/city/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/cities'
+    | '/expense-tracker'
+    | '/fare-shield'
+    | '/features'
+    | '/trip-generator'
+    | '/trip-story'
+    | '/city/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/cities'
+    | '/expense-tracker'
+    | '/fare-shield'
+    | '/features'
+    | '/trip-generator'
+    | '/trip-story'
+    | '/city/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CitiesRoute: typeof CitiesRoute
+  ExpenseTrackerRoute: typeof ExpenseTrackerRoute
+  FareShieldRoute: typeof FareShieldRoute
+  FeaturesRoute: typeof FeaturesRoute
+  TripGeneratorRoute: typeof TripGeneratorRoute
+  TripStoryRoute: typeof TripStoryRoute
+  CitySlugRoute: typeof CitySlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cities': {
+      id: '/cities'
+      path: '/cities'
+      fullPath: '/cities'
+      preLoaderRoute: typeof CitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/expense-tracker': {
+      id: '/expense-tracker'
+      path: '/expense-tracker'
+      fullPath: '/expense-tracker'
+      preLoaderRoute: typeof ExpenseTrackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fare-shield': {
+      id: '/fare-shield'
+      path: '/fare-shield'
+      fullPath: '/fare-shield'
+      preLoaderRoute: typeof FareShieldRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trip-generator': {
+      id: '/trip-generator'
+      path: '/trip-generator'
+      fullPath: '/trip-generator'
+      preLoaderRoute: typeof TripGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trip-story': {
+      id: '/trip-story'
+      path: '/trip-story'
+      fullPath: '/trip-story'
+      preLoaderRoute: typeof TripStoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/city/$slug': {
+      id: '/city/$slug'
+      path: '/city/$slug'
+      fullPath: '/city/$slug'
+      preLoaderRoute: typeof CitySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CitiesRoute: CitiesRoute,
+  ExpenseTrackerRoute: ExpenseTrackerRoute,
+  FareShieldRoute: FareShieldRoute,
+  FeaturesRoute: FeaturesRoute,
+  TripGeneratorRoute: TripGeneratorRoute,
+  TripStoryRoute: TripStoryRoute,
+  CitySlugRoute: CitySlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

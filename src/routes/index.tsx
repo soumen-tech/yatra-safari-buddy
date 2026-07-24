@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { Halftone as SharedHalftone, StampTag as SharedStampTag } from "@/components/yatra";
 import heroImg from "@/assets/hero-yatra.jpg";
 import kolkata from "@/assets/poster-kolkata.jpg";
 import delhi from "@/assets/poster-delhi.jpg";
@@ -182,12 +183,12 @@ function Nav() {
           </span>
         </a>
         <nav className="hidden gap-6 text-sm font-bold uppercase tracking-widest md:flex">
-          <a href="#cities" className="hover:text-[var(--hotpink)]">Cities</a>
-          <a href="#features" className="hover:text-[var(--hotpink)]">Features</a>
-          <a href="#demos" className="hover:text-[var(--hotpink)]">Demos</a>
-          <a href="#manifesto" className="hover:text-[var(--hotpink)]">Manifesto</a>
+          <Link to="/cities" className="hover:text-[var(--hotpink)]">Cities</Link>
+          <Link to="/features" className="hover:text-[var(--hotpink)]">Features</Link>
+          <Link to="/trip-generator" className="hover:text-[var(--hotpink)]">Plan a Trip</Link>
+          <Link to="/fare-shield" className="hover:text-[var(--hotpink)]">Fare-Shield</Link>
         </nav>
-        <a href="#waitlist" className="btn-poster !py-2 !px-4 text-xs">Get Early Access</a>
+        <Link to="/trip-generator" className="btn-poster !py-2 !px-4 text-xs">Plan a Trip</Link>
       </div>
     </header>
   );
@@ -318,7 +319,7 @@ function Cities() {
             </p>
           </div>
           <div className="font-[family-name:var(--font-heavy)] text-sm uppercase tracking-[0.3em] text-[var(--mustard)]">
-            06 / 400+ coming
+            14 / 400+ coming
           </div>
         </div>
 
