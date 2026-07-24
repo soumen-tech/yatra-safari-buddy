@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageShell, Halftone, StampTag } from "@/components/yatra";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -29,13 +30,12 @@ function AuthPage() {
 
   // Check if already logged in
   useEffect(() => {
-    const user = localStorage.getItem("yatra_user");
-    if (user) {
-      navigate({ to: "/" });
-    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) navigate({ to: "/" });
+    });
   }, [navigate]);
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -47,54 +47,122 @@ function AuthPage() {
 
     setLoading(true);
 
-    setTimeout(() => {
+    try {
       if (isSignUp) {
         if (!name) {
           setError("Please enter your name.");
           setLoading(false);
           return;
         }
+
         if (!otpSent) {
+          // Send OTP via Supabase
+          const { error: signUpErr } = await supabase.auth.signUp({
+            email,
+            password: password || crypto.randomUUID(), // Supabase requires a password
+            options: {
+              data: { display_name: name },
+              emailRedirectTo: window.location.origin,
+            },
+          });
+
+          if (signUpErr) {
+            // If user already exists, try OTP sign-in instead
+            if (signUpErr.message.includes("already registered")) {
+              const { error: otpErr } = await supabase.auth.signInWithOtp({ email });
+              if (otpErr) {
+                setError(otpErr.message);
+                setLoading(false);
+                return;
+              }
+            } else {
+              setError(signUpErr.message);
+              setLoading(false);
+              return;
+            }
+          }
+
           setOtpSent(true);
-          setSuccess("OTP sent to your email!");
-          setLoading(false);
-          return;
-        }
-        if (otp !== "1234") {
-          setError("Invalid OTP. Hint: Use 1234 for testing.");
+          setSuccess("Verification code sent! Check your email.");
           setLoading(false);
           return;
         }
 
-        // Success Sign Up
-        const userObj = { name, email, avatar: name.charAt(0).toUpperCase() };
-        localStorage.setItem("yatra_user", JSON.stringify(userObj));
-        window.dispatchEvent(new Event("storage")); // Notify nav component
-        setSuccess("Account created successfully!");
-        setTimeout(() => {
-          navigate({ to: "/" });
-        }, 1000);
+        // Verify OTP
+        const { data, error: verifyErr } = await supabase.auth.verifyOtp({
+          email,
+          token: otp,
+          type: "signup",
+        });
+
+        if (verifyErr) {
+          // Try email OTP type if signup type fails
+          const { data: data2, error: verifyErr2 } = await supabase.auth.verifyOtp({
+            email,
+            token: otp,
+            type: "email",
+          });
+          if (verifyErr2) {
+            setError("Invalid verification code. Please check your email and try again.");
+            setLoading(false);
+            return;
+          }
+          if (data2.session) {
+            setSuccess("Account verified! Redirecting...");
+            setTimeout(() => navigate({ to: "/" }), 1000);
+            return;
+          }
+        }
+
+        if (data.session) {
+          setSuccess("Account created successfully!");
+          setTimeout(() => navigate({ to: "/" }), 1000);
+        }
       } else {
-        // Sign In
-        if (password !== "password" && password !== "123456") {
-          setError("Invalid password. Hint: Use 'password' for testing.");
+        // Sign In with email + password
+        const { data, error: signInErr } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInErr) {
+          // Offer OTP as alternative
+          if (signInErr.message.includes("Invalid login credentials")) {
+            setError("Wrong password. Try using 'Send Magic Link' or check your password.");
+          } else {
+            setError(signInErr.message);
+          }
           setLoading(false);
           return;
         }
 
-        // Success Sign In
-        const generatedName = email.split("@")[0];
-        const formattedName = generatedName.charAt(0).toUpperCase() + generatedName.slice(1);
-        const userObj = { name: formattedName, email, avatar: formattedName.charAt(0).toUpperCase() };
-        localStorage.setItem("yatra_user", JSON.stringify(userObj));
-        window.dispatchEvent(new Event("storage")); // Notify nav component
-        setSuccess("Logged in successfully!");
-        setTimeout(() => {
-          navigate({ to: "/" });
-        }, 1000);
+        if (data.session) {
+          setSuccess("Logged in successfully!");
+          window.dispatchEvent(new Event("storage")); // Notify nav component
+          setTimeout(() => navigate({ to: "/" }), 800);
+        }
       }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      console.error("[Auth]", err);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+  };
+
+  const handleMagicLink = async () => {
+    if (!email) {
+      setError("Please enter your email first.");
+      return;
+    }
+    setLoading(true);
+    const { error: magicErr } = await supabase.auth.signInWithOtp({ email });
+    setLoading(false);
+    if (magicErr) {
+      setError(magicErr.message);
+    } else {
+      setSuccess("Magic link sent! Check your email and click the link to sign in.");
+    }
   };
 
   return (
@@ -121,11 +189,7 @@ function AuthPage() {
             <div className="flex border-b-3 border-[var(--ink)] mb-6">
               <button
                 type="button"
-                onClick={() => {
-                  setIsSignUp(false);
-                  setError("");
-                  setSuccess("");
-                }}
+                onClick={() => { setIsSignUp(false); setError(""); setSuccess(""); setOtpSent(false); }}
                 className={`flex-1 py-3 text-center font-[family-name:var(--font-heavy)] text-sm uppercase tracking-widest transition-colors ${
                   !isSignUp
                     ? "bg-[var(--hotpink)] text-[var(--cream)] border-r-3 border-[var(--ink)]"
@@ -136,11 +200,7 @@ function AuthPage() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setIsSignUp(true);
-                  setError("");
-                  setSuccess("");
-                }}
+                onClick={() => { setIsSignUp(true); setError(""); setSuccess(""); setOtpSent(false); }}
                 className={`flex-1 py-3 text-center font-[family-name:var(--font-heavy)] text-sm uppercase tracking-widest transition-colors ${
                   isSignUp
                     ? "bg-[var(--hotpink)] text-[var(--cream)] border-l-3 border-[var(--ink)]"
@@ -175,7 +235,7 @@ function AuthPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Rahul Kumar"
                     className="w-full border-2 border-[var(--ink)] bg-[var(--cream)] px-3 py-2 font-bold outline-none focus:ring-2 focus:ring-[var(--hotpink)]"
-                    required={isSignUp}
+                    required={isSignUp && !otpSent}
                   />
                 </label>
               )}
@@ -204,16 +264,30 @@ function AuthPage() {
                       type="text"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
-                      placeholder="Enter 1234"
-                      maxLength={4}
+                      placeholder="6-digit code"
+                      maxLength={6}
                       className="w-full border-2 border-[var(--ink)] bg-[var(--cream)] px-3 py-2 font-bold outline-none focus:ring-2 focus:ring-[var(--hotpink)] text-center tracking-[0.5em] text-lg"
                       required
                     />
                     <div className="text-[10px] text-muted-foreground mt-1 uppercase">
-                      Hint: Use 1234 for testing.
+                      Check your inbox for the 6-digit code from Supabase.
                     </div>
                   </label>
-                ) : null
+                ) : (
+                  <label className="block">
+                    <div className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-1">
+                      Password
+                    </div>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Create a password"
+                      className="w-full border-2 border-[var(--ink)] bg-[var(--cream)] px-3 py-2 font-bold outline-none focus:ring-2 focus:ring-[var(--hotpink)]"
+                      minLength={6}
+                    />
+                  </label>
+                )
               ) : (
                 <label className="block">
                   <div className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-1">
@@ -227,9 +301,6 @@ function AuthPage() {
                     className="w-full border-2 border-[var(--ink)] bg-[var(--cream)] px-3 py-2 font-bold outline-none focus:ring-2 focus:ring-[var(--hotpink)]"
                     required
                   />
-                  <div className="text-[10px] text-muted-foreground mt-1 uppercase">
-                    Hint: Use 'password' for testing.
-                  </div>
                 </label>
               )}
 
@@ -251,6 +322,16 @@ function AuthPage() {
                 )}
               </button>
             </form>
+
+            {!isSignUp && (
+              <button
+                onClick={handleMagicLink}
+                disabled={loading}
+                className="mt-3 w-full text-center text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-[var(--hotpink)] transition-colors"
+              >
+                ✉️ Sign in with magic link instead
+              </button>
+            )}
           </div>
         </div>
       </section>

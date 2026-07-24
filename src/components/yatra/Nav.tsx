@@ -1,43 +1,17 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-
-interface User {
-  name: string;
-  email: string;
-  avatar: string;
-}
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Nav() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
-  const checkUser = () => {
-    const stored = localStorage.getItem("yatra_user");
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch (e) {
-        setUser(null);
-      }
-    } else {
-      setUser(null);
-    }
-  };
-
-  useEffect(() => {
-    checkUser();
-    // Listen for storage events (e.g. login/logout in other tabs or components)
-    window.addEventListener("storage", checkUser);
-    return () => window.removeEventListener("storage", checkUser);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("yatra_user");
-    setUser(null);
+  const handleLogout = async () => {
+    await signOut();
     setDropdownOpen(false);
-    window.dispatchEvent(new Event("storage"));
+    setMenuOpen(false);
     navigate({ to: "/" });
   };
 
