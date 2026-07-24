@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CitiesRouteImport } from './routes/cities'
 import { Route as ExpenseTrackerRouteImport } from './routes/expense-tracker'
 import { Route as FareShieldRouteImport } from './routes/fare-shield'
 import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as SpontaneousRouteImport } from './routes/spontaneous'
 import { Route as TripGeneratorRouteImport } from './routes/trip-generator'
 import { Route as TripStoryRouteImport } from './routes/trip-story'
 import { Route as CitySlugRouteImport } from './routes/city.$slug'
@@ -21,6 +23,11 @@ import { Route as CitySlugRouteImport } from './routes/city.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CitiesRoute = CitiesRouteImport.update({
@@ -43,6 +50,11 @@ const FeaturesRoute = FeaturesRouteImport.update({
   path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpontaneousRoute = SpontaneousRouteImport.update({
+  id: '/spontaneous',
+  path: '/spontaneous',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TripGeneratorRoute = TripGeneratorRouteImport.update({
   id: '/trip-generator',
   path: '/trip-generator',
@@ -61,20 +73,24 @@ const CitySlugRoute = CitySlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/cities': typeof CitiesRoute
   '/expense-tracker': typeof ExpenseTrackerRoute
   '/fare-shield': typeof FareShieldRoute
   '/features': typeof FeaturesRoute
+  '/spontaneous': typeof SpontaneousRoute
   '/trip-generator': typeof TripGeneratorRoute
   '/trip-story': typeof TripStoryRoute
   '/city/$slug': typeof CitySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/cities': typeof CitiesRoute
   '/expense-tracker': typeof ExpenseTrackerRoute
   '/fare-shield': typeof FareShieldRoute
   '/features': typeof FeaturesRoute
+  '/spontaneous': typeof SpontaneousRoute
   '/trip-generator': typeof TripGeneratorRoute
   '/trip-story': typeof TripStoryRoute
   '/city/$slug': typeof CitySlugRoute
@@ -82,10 +98,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/cities': typeof CitiesRoute
   '/expense-tracker': typeof ExpenseTrackerRoute
   '/fare-shield': typeof FareShieldRoute
   '/features': typeof FeaturesRoute
+  '/spontaneous': typeof SpontaneousRoute
   '/trip-generator': typeof TripGeneratorRoute
   '/trip-story': typeof TripStoryRoute
   '/city/$slug': typeof CitySlugRoute
@@ -94,30 +112,36 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/cities'
     | '/expense-tracker'
     | '/fare-shield'
     | '/features'
+    | '/spontaneous'
     | '/trip-generator'
     | '/trip-story'
     | '/city/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/cities'
     | '/expense-tracker'
     | '/fare-shield'
     | '/features'
+    | '/spontaneous'
     | '/trip-generator'
     | '/trip-story'
     | '/city/$slug'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/cities'
     | '/expense-tracker'
     | '/fare-shield'
     | '/features'
+    | '/spontaneous'
     | '/trip-generator'
     | '/trip-story'
     | '/city/$slug'
@@ -125,10 +149,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CitiesRoute: typeof CitiesRoute
   ExpenseTrackerRoute: typeof ExpenseTrackerRoute
   FareShieldRoute: typeof FareShieldRoute
   FeaturesRoute: typeof FeaturesRoute
+  SpontaneousRoute: typeof SpontaneousRoute
   TripGeneratorRoute: typeof TripGeneratorRoute
   TripStoryRoute: typeof TripStoryRoute
   CitySlugRoute: typeof CitySlugRoute
@@ -141,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cities': {
@@ -171,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/spontaneous': {
+      id: '/spontaneous'
+      path: '/spontaneous'
+      fullPath: '/spontaneous'
+      preLoaderRoute: typeof SpontaneousRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trip-generator': {
       id: '/trip-generator'
       path: '/trip-generator'
@@ -197,10 +237,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CitiesRoute: CitiesRoute,
   ExpenseTrackerRoute: ExpenseTrackerRoute,
   FareShieldRoute: FareShieldRoute,
   FeaturesRoute: FeaturesRoute,
+  SpontaneousRoute: SpontaneousRoute,
   TripGeneratorRoute: TripGeneratorRoute,
   TripStoryRoute: TripStoryRoute,
   CitySlugRoute: CitySlugRoute,

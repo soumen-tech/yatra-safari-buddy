@@ -1,8 +1,45 @@
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+
+interface User {
+  name: string;
+  email: string;
+  avatar: string;
+}
 
 export function Nav() {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const checkUser = () => {
+    const stored = localStorage.getItem("yatra_user");
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch (e) {
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    checkUser();
+    // Listen for storage events (e.g. login/logout in other tabs or components)
+    window.addEventListener("storage", checkUser);
+    return () => window.removeEventListener("storage", checkUser);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("yatra_user");
+    setUser(null);
+    setDropdownOpen(false);
+    window.dispatchEvent(new Event("storage"));
+    navigate({ to: "/" });
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b-[3px] border-[var(--ink)] bg-[var(--cream)]">
@@ -26,23 +63,59 @@ export function Nav() {
           <Link to="/trip-generator" className="hover:text-[var(--hotpink)]">
             Plan a Trip
           </Link>
+          <Link to="/spontaneous" className="hover:text-[var(--hotpink)]">
+            Got Cash?
+          </Link>
           <Link to="/fare-shield" className="hover:text-[var(--hotpink)]">
             Fare-Shield
           </Link>
         </nav>
 
-        {/* Mobile menu toggle */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="grid h-9 w-9 place-items-center border-[3px] border-[var(--ink)] bg-[var(--mustard)] font-[family-name:var(--font-heavy)] text-sm shadow-[3px_3px_0_var(--ink)] md:hidden"
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? "✕" : "☰"}
-        </button>
+        {/* User Auth section & mobile menu */}
+        <div className="flex items-center gap-2">
+          {user ? (
+            <div className="relative hidden md:block">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center gap-2 border-[3px] border-[var(--ink)] bg-[var(--mustard)] px-3 py-1.5 font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest shadow-[3px_3px_0_var(--ink)] cursor-pointer"
+              >
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--hotpink)] text-[var(--cream)] text-[10px]">
+                  {user.avatar}
+                </span>
+                {user.name}
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 border-[3px] border-[var(--ink)] bg-[var(--cream)] p-2 shadow-[4px_4px_0_var(--ink)] z-50">
+                  <div className="px-2 py-1 text-xs text-muted-foreground border-b-2 border-dashed border-[var(--ink)] mb-2 font-bold break-all">
+                    {user.email}
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-2 py-1.5 font-[family-name:var(--font-heavy)] text-xs text-[var(--hotpink)] uppercase tracking-widest hover:bg-[var(--mustard)]/20 cursor-pointer"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to="/auth"
+              className="btn-poster hidden !py-1.5 !px-3 text-xs md:inline-flex"
+            >
+              Sign In
+            </Link>
+          )}
 
-        <Link to="/trip-generator" className="btn-poster hidden !py-2 !px-4 text-xs md:inline-flex">
-          Plan a Trip
-        </Link>
+          {/* Mobile menu toggle */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="grid h-9 w-9 place-items-center border-[3px] border-[var(--ink)] bg-[var(--mustard)] font-[family-name:var(--font-heavy)] text-sm shadow-[3px_3px_0_var(--ink)] md:hidden"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? "✕" : "☰"}
+          </button>
+        </div>
       </div>
 
       {/* Mobile dropdown */}
@@ -58,6 +131,9 @@ export function Nav() {
             <Link to="/trip-generator" onClick={() => setMenuOpen(false)} className="hover:text-[var(--hotpink)]">
               Plan a Trip
             </Link>
+            <Link to="/spontaneous" onClick={() => setMenuOpen(false)} className="hover:text-[var(--hotpink)]">
+              Got Cash?
+            </Link>
             <Link to="/fare-shield" onClick={() => setMenuOpen(false)} className="hover:text-[var(--hotpink)]">
               Fare-Shield
             </Link>
@@ -67,6 +143,30 @@ export function Nav() {
             <Link to="/trip-story" onClick={() => setMenuOpen(false)} className="hover:text-[var(--hotpink)]">
               Trip Story
             </Link>
+            {user ? (
+              <div className="border-t-2 border-dashed border-[var(--ink)] pt-3 mt-1 flex flex-col gap-2">
+                <div className="text-[10px] text-muted-foreground uppercase font-black tracking-widest break-all">
+                  Logged in as: {user.name} ({user.email})
+                </div>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    handleLogout();
+                  }}
+                  className="text-left font-[family-name:var(--font-heavy)] text-xs text-[var(--hotpink)] uppercase tracking-widest"
+                >
+                  Log Out
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/auth"
+                onClick={() => setMenuOpen(false)}
+                className="font-[family-name:var(--font-heavy)] text-xs text-[var(--hotpink)] uppercase tracking-widest border-t-2 border-dashed border-[var(--ink)] pt-3 mt-1"
+              >
+                Sign In
+              </Link>
+            )}
           </nav>
         </div>
       )}

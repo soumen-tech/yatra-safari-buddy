@@ -82,72 +82,40 @@ const featureGroups: {
   items: { name: string; blurb: string }[];
 }[] = [
   {
-    title: "Trip Planning",
+    title: "Trip Planning & Impulse",
     color: "mustard",
     items: [
       {
         name: "Budget-First Trip Generator",
-        blurb: "Tell YatraAI what's in your wallet. It builds the trip around ₹, not the other way round.",
+        blurb: "Tell YatraAI what's in your wallet. It builds the trip around ₹, and supports group sizes.",
       },
       {
-        name: "Can I Afford It Right Now?",
-        blurb: "One tap. Real-time answer. No spreadsheets, no shame.",
+        name: "Got ₹X and a Few Hours?",
+        blurb: "Spontaneous same-day outing planner based on cash and time available nearby.",
       },
       {
         name: "Group Trip Splitter",
-        blurb: "Six friends, six budgets. One plan that doesn't leave anyone out.",
-      },
-      {
-        name: "Weather & Festival Timing",
-        blurb: "Monsoon in Kerala? Diwali in Varanasi? YatraAI knows when to go, when to wait.",
+        blurb: "Split costs fairly based on uneven income weights so everyone can travel.",
       },
     ],
   },
   {
-    title: "Budget Tools",
+    title: "Budget & Language",
     color: "pink",
     items: [
-      { name: "Photo-to-Expense Tracker", blurb: "Snap a bill, it's logged. In your language, in your currency." },
-      { name: "Voice Expense Logging", blurb: "\"Chai, 20 rupees.\" That's it. Done." },
-      { name: "Overspending Alerts", blurb: "A gentle nudge before, not a sinking feeling after." },
-      { name: "Split-Cost Negotiator", blurb: "Handles the awkward math between friends so you don't have to." },
-      { name: "Post-Trip Budget Report", blurb: "Where every rupee went. What surprised you. What to remember." },
+      { name: "Verify-to-Log Expense Tracker", blurb: "OCR/Voice input with manual confirmation and beneficiary selection." },
+      { name: "Interactive Bargaining Assistant", blurb: "Real-time dialect translator for Hindi, Bengali, and Tamil markets." },
+      { name: "Trip Story Memory Postcards", blurb: "Tappable day cards showing itemized expenses, polaroids, and splits." },
     ],
   },
   {
-    title: "Safety",
+    title: "Safety & Future Roadmap",
     color: "dusk",
     items: [
-      { name: "Fare-Shield™ Overcharge Detector", blurb: "Tells you the fair fare before you sit in the auto." },
-      { name: "Scam Phrase Detector", blurb: "\"Meter kharaab hai\" — YatraAI hears it, warns you, coaches your reply." },
-      { name: "'Am I Safe?' Chat", blurb: "Late night in an unfamiliar lane? Ask. Get grounded, honest answers." },
-      { name: "Silent SOS + AI Summary", blurb: "One tap sends your live location and a plain-English situation summary to your circle." },
-      { name: "Solo Female Companion Mode", blurb: "Verified stays, women-driver preferences, safe-hour routing, quiet check-ins." },
-    ],
-  },
-  {
-    title: "Language",
-    color: "mustard",
-    items: [
-      { name: "Dialect-Aware Voice Translator", blurb: "Bengali, Hindi, Tamil, Marathi, Bhojpuri — the way locals actually talk." },
-      { name: "Bargaining Assistant", blurb: "Real market prices + polite phrases. You'll never overpay for a shawl again." },
-      { name: "Menu & Sign Photo Reader", blurb: "Point your camera. Get it in your language, with allergen flags." },
-    ],
-  },
-  {
-    title: "Navigation",
-    color: "pink",
-    items: [
-      { name: "Cheapest Multi-Modal Route", blurb: "Bus + local + walk vs. cab. YatraAI reasons out the honest cheapest way." },
-      { name: "Offline Landmark Nav", blurb: "\"Left after the red mandir, past the tea stall.\" Works with no signal." },
-    ],
-  },
-  {
-    title: "Memories",
-    color: "dusk",
-    items: [
-      { name: "Auto Trip Story", blurb: "Your photos, expenses, and voice notes stitched into a story worth keeping." },
-      { name: "Postcard Captions", blurb: "Shareable, warm, funny — never AI-generic." },
+      { name: "Fare-Shield™ Overcharge Detector", blurb: "Pre-auto verification for fair fares + local counter-offer scripts." },
+      { name: "'Am I Safe?' Emergency Chat", blurb: "Interactive safety advisor checking late arrivals and street scams." },
+      { name: "Silent SOS Broadcast (Roadmap)", blurb: "Location-aware offline emergency broadcast to circles." },
+      { name: "Solo Female Mode (Roadmap)", blurb: "Verified accommodations and female-driver routing preferences." },
     ],
   },
 ];
@@ -371,53 +339,58 @@ function DemoBudget() {
   const spent = plan.reduce((a, b) => a + b.cost, 0);
   const remaining = budget - spent;
   return (
-    <div className="poster-card grain p-5 sm:p-7">
-      <div className="flex items-center justify-between">
-        <StampTag tone="pink">Demo 01</StampTag>
-        <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Budget Trip Generator</span>
-      </div>
-      <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">Golden Triangle. Your money.</h3>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        <label className="block">
-          <div className="text-xs font-black uppercase tracking-widest">Budget (₹)</div>
-          <input
-            type="range" min={2000} max={10000} step={100}
-            value={budget}
-            onChange={(e) => setBudget(Number(e.target.value))}
-            className="mt-2 w-full accent-[var(--hotpink)]"
-          />
-          <div className="mt-1 font-[family-name:var(--font-display)] text-3xl text-[var(--hotpink)]">₹{budget.toLocaleString("en-IN")}</div>
-        </label>
-        <label className="block">
-          <div className="text-xs font-black uppercase tracking-widest">Days</div>
-          <input
-            type="range" min={2} max={5} step={1}
-            value={days}
-            onChange={(e) => setDays(Number(e.target.value))}
-            className="mt-2 w-full accent-[var(--hotpink)]"
-          />
-          <div className="mt-1 font-[family-name:var(--font-display)] text-3xl">{days} days</div>
-        </label>
-      </div>
+    <div className="poster-card grain p-5 sm:p-7 flex flex-col justify-between h-full">
+      <div>
+        <div className="flex items-center justify-between">
+          <StampTag tone="pink">Demo 01</StampTag>
+          <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Budget Trip Generator</span>
+        </div>
+        <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">Golden Triangle. Your money.</h3>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <div className="text-xs font-black uppercase tracking-widest">Budget (₹)</div>
+            <input
+              type="range" min={2000} max={10000} step={100}
+              value={budget}
+              onChange={(e) => setBudget(Number(e.target.value))}
+              className="mt-2 w-full accent-[var(--hotpink)]"
+            />
+            <div className="mt-1 font-[family-name:var(--font-display)] text-3xl text-[var(--hotpink)]">₹{budget.toLocaleString("en-IN")}</div>
+          </label>
+          <label className="block">
+            <div className="text-xs font-black uppercase tracking-widest">Days</div>
+            <input
+              type="range" min={2} max={5} step={1}
+              value={days}
+              onChange={(e) => setDays(Number(e.target.value))}
+              className="mt-2 w-full accent-[var(--hotpink)]"
+            />
+            <div className="mt-1 font-[family-name:var(--font-display)] text-3xl">{days} days</div>
+          </label>
+        </div>
 
-      <div className="mt-6 divide-y-2 divide-dashed divide-[var(--ink)] border-y-[3px] border-[var(--ink)]">
-        {plan.map((p) => (
-          <div key={p.d} className="flex items-center justify-between py-3 text-sm">
-            <div>
-              <div className="font-[family-name:var(--font-heavy)] uppercase tracking-widest">{p.d} · {p.city}</div>
-              <div className="text-muted-foreground">{p.stay}</div>
+        <div className="mt-6 divide-y-2 divide-dashed divide-[var(--ink)] border-y-[3px] border-[var(--ink)]">
+          {plan.map((p) => (
+            <div key={p.d} className="flex items-center justify-between py-3 text-sm">
+              <div>
+                <div className="font-[family-name:var(--font-heavy)] uppercase tracking-widest">{p.d} · {p.city}</div>
+                <div className="text-muted-foreground">{p.stay}</div>
+              </div>
+              <div className="font-[family-name:var(--font-display)] text-2xl">₹{p.cost}</div>
             </div>
-            <div className="font-[family-name:var(--font-display)] text-2xl">₹{p.cost}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <div className="mt-4 flex items-center justify-between">
-        <div className="text-sm">Spent <b>₹{spent}</b></div>
-        <div className={`font-[family-name:var(--font-heavy)] text-lg uppercase tracking-widest ${remaining >= 0 ? "text-[var(--dusk)]" : "text-[var(--hotpink)]"}`}>
-          {remaining >= 0 ? `₹${remaining} left over ✓` : `₹${Math.abs(remaining)} short — trim a day`}
+        <div className="mt-4 flex items-center justify-between">
+          <div className="text-sm">Spent <b>₹{spent}</b></div>
+          <div className={`font-[family-name:var(--font-heavy)] text-sm uppercase tracking-widest ${remaining >= 0 ? "text-[var(--dusk)]" : "text-[var(--hotpink)]"}`}>
+            {remaining >= 0 ? `₹${remaining} left ✓` : `₹${Math.abs(remaining)} short`}
+          </div>
         </div>
       </div>
+      <Link to="/trip-generator" className="mt-6 btn-poster w-full justify-center text-xs">
+        🗺️ Build Full Itinerary →
+      </Link>
     </div>
   );
 }
@@ -430,43 +403,48 @@ function DemoFare() {
   const fair = 160;
   const overcharge = quoted - fair;
   return (
-    <div className="poster-card grain p-5 sm:p-7 bg-[var(--mustard)]">
-      <div className="flex items-center justify-between">
-        <StampTag tone="dusk">Demo 02</StampTag>
-        <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Fare-Shield™</span>
-      </div>
-      <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">Auto quoted you ₹{quoted}?</h3>
-      <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <label className="stamp-card">
-          <div className="text-[10px] font-black uppercase tracking-widest">From</div>
-          <input value={from} onChange={(e) => setFrom(e.target.value)} className="w-full bg-transparent font-[family-name:var(--font-heavy)] text-lg outline-none" />
-        </label>
-        <label className="stamp-card">
-          <div className="text-[10px] font-black uppercase tracking-widest">To</div>
-          <input value={to} onChange={(e) => setTo(e.target.value)} className="w-full bg-transparent font-[family-name:var(--font-heavy)] text-lg outline-none" />
-        </label>
-        <label className="stamp-card">
-          <div className="text-[10px] font-black uppercase tracking-widest">Quoted (₹)</div>
-          <input type="number" value={quoted} onChange={(e) => setQuoted(Number(e.target.value) || 0)} className="w-full bg-transparent font-[family-name:var(--font-heavy)] text-lg outline-none" />
-        </label>
-      </div>
-
-      <div className="mt-6 border-[3px] border-[var(--ink)] bg-[var(--cream)] p-4">
+    <div className="poster-card grain p-5 sm:p-7 bg-[var(--mustard)] flex flex-col justify-between h-full text-[var(--ink)]">
+      <div>
         <div className="flex items-center justify-between">
-          <div className="text-xs font-black uppercase tracking-widest">Fair fare · {from} → {to}</div>
-          <div className="font-[family-name:var(--font-display)] text-3xl text-[var(--dusk)]">₹{fair}</div>
+          <StampTag tone="dusk">Demo 02</StampTag>
+          <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Fare-Shield™</span>
         </div>
-        <div className="mt-2 h-3 w-full border-2 border-[var(--ink)] bg-[var(--cream)]">
-          <div className="h-full bg-[var(--hotpink)]" style={{ width: `${Math.min(100, (quoted / (fair * 3)) * 100)}%` }} />
+        <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">Auto quoted you ₹{quoted}?</h3>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <label className="stamp-card">
+            <div className="text-[10px] font-black uppercase tracking-widest">From</div>
+            <input value={from} onChange={(e) => setFrom(e.target.value)} className="w-full bg-transparent font-[family-name:var(--font-heavy)] text-lg outline-none" />
+          </label>
+          <label className="stamp-card">
+            <div className="text-[10px] font-black uppercase tracking-widest">To</div>
+            <input value={to} onChange={(e) => setTo(e.target.value)} className="w-full bg-transparent font-[family-name:var(--font-heavy)] text-lg outline-none" />
+          </label>
+          <label className="stamp-card">
+            <div className="text-[10px] font-black uppercase tracking-widest">Quoted (₹)</div>
+            <input type="number" value={quoted} onChange={(e) => setQuoted(Number(e.target.value) || 0)} className="w-full bg-transparent font-[family-name:var(--font-heavy)] text-lg outline-none" />
+          </label>
         </div>
-        <div className="mt-3 font-[family-name:var(--font-heavy)] text-sm uppercase tracking-widest">
-          {overcharge > 0 ? (
-            <span className="text-[var(--hotpink)]">Overcharge alert: ₹{overcharge} above fair. Say: "Meter chalao dada."</span>
-          ) : (
-            <span className="text-[var(--dusk)]">Fair fare. Get in.</span>
-          )}
+
+        <div className="mt-6 border-[3px] border-[var(--ink)] bg-[var(--cream)] p-4">
+          <div className="flex items-center justify-between">
+            <div className="text-xs font-black uppercase tracking-widest">Fair fare · {from} → {to}</div>
+            <div className="font-[family-name:var(--font-display)] text-3xl text-[var(--dusk)]">₹{fair}</div>
+          </div>
+          <div className="mt-2 h-3 w-full border-2 border-[var(--ink)] bg-[var(--cream)]">
+            <div className="h-full bg-[var(--hotpink)]" style={{ width: `${Math.min(100, (quoted / (fair * 3)) * 100)}%` }} />
+          </div>
+          <div className="mt-3 font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">
+            {overcharge > 0 ? (
+              <span className="text-[var(--hotpink)]">Overcharge alert: ₹{overcharge} above fair. Say: "Meter chalao."</span>
+            ) : (
+              <span className="text-[var(--dusk)]">Fair fare. Get in.</span>
+            )}
+          </div>
         </div>
       </div>
+      <Link to="/fare-shield" className="mt-6 btn-poster !bg-[var(--ink)] !text-[var(--mustard)] w-full justify-center text-xs hover:!bg-[var(--hotpink)] hover:!text-[var(--cream)]">
+        🛡️ Verify Fares & Get Phrases →
+      </Link>
     </div>
   );
 }
@@ -488,30 +466,35 @@ function DemoExpense() {
   };
   const total = items.reduce((a, b) => a + b.amt, 0);
   return (
-    <div className="poster-card grain p-5 sm:p-7 bg-[var(--hotpink)] text-[var(--cream)]">
-      <div className="flex items-center justify-between">
-        <span className="chip !bg-[var(--cream)] !text-[var(--ink)]">Demo 03</span>
-        <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Photo Expense Logger</span>
+    <div className="poster-card grain p-5 sm:p-7 bg-[var(--hotpink)] text-[var(--cream)] flex flex-col justify-between h-full">
+      <div>
+        <div className="flex items-center justify-between">
+          <span className="chip !bg-[var(--cream)] !text-[var(--ink)]">Demo 03</span>
+          <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Expense & Split</span>
+        </div>
+        <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">Snap the bill. That's it.</h3>
+        <button onClick={capture} className="mt-4 btn-poster !bg-[var(--mustard)] !text-[var(--ink)]">
+          📷 {pending ?? "Capture new bill"}
+        </button>
+        <ul className="mt-5 divide-y-2 divide-dashed divide-[var(--cream)]/40 border-y-2 border-[var(--cream)]/60">
+          {items.map((it, i) => (
+            <li key={i} className="flex items-center justify-between py-3">
+              <div>
+                <div className="font-[family-name:var(--font-heavy)] uppercase tracking-widest text-sm">{it.t}</div>
+                <div className="text-xs opacity-80">{it.cat}</div>
+              </div>
+              <div className="font-[family-name:var(--font-display)] text-2xl">₹{it.amt}</div>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4 flex items-center justify-between font-[family-name:var(--font-heavy)] uppercase tracking-widest text-sm">
+          <span>Today so far</span>
+          <span className="text-2xl font-[family-name:var(--font-display)]">₹{total}</span>
+        </div>
       </div>
-      <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">Snap the bill. That's it.</h3>
-      <button onClick={capture} className="mt-4 btn-poster !bg-[var(--mustard)] !text-[var(--ink)]">
-        📷 {pending ?? "Capture new bill"}
-      </button>
-      <ul className="mt-5 divide-y-2 divide-dashed divide-[var(--cream)]/40 border-y-2 border-[var(--cream)]/60">
-        {items.map((it, i) => (
-          <li key={i} className="flex items-center justify-between py-3">
-            <div>
-              <div className="font-[family-name:var(--font-heavy)] uppercase tracking-widest text-sm">{it.t}</div>
-              <div className="text-xs opacity-80">{it.cat}</div>
-            </div>
-            <div className="font-[family-name:var(--font-display)] text-2xl">₹{it.amt}</div>
-          </li>
-        ))}
-      </ul>
-      <div className="mt-4 flex items-center justify-between font-[family-name:var(--font-heavy)] uppercase tracking-widest">
-        <span>Today so far</span>
-        <span className="text-3xl font-[family-name:var(--font-display)]">₹{total}</span>
-      </div>
+      <Link to="/expense-tracker" className="mt-6 btn-poster !bg-[var(--cream)] !text-[var(--ink)] hover:!bg-[var(--mustard)] hover:!text-[var(--ink)] w-full justify-center text-xs">
+        👥 Split Group Expenses & Invite →
+      </Link>
     </div>
   );
 }
@@ -520,34 +503,38 @@ function DemoExpense() {
 function DemoStory() {
   const [gen, setGen] = useState(false);
   return (
-    <div className="poster-card grain p-5 sm:p-7 bg-[var(--dusk)] text-[var(--cream)]">
-      <div className="flex items-center justify-between">
-        <span className="chip !bg-[var(--mustard)]">Demo 04</span>
-        <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Trip Story Generator</span>
-      </div>
-      <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">A postcard from your trip.</h3>
-      <p className="mt-2 text-[var(--cream)]/85">32 photos, 41 expenses, 6 voice notes — YatraAI stitches them into a story only you could tell.</p>
-      <button onClick={() => setGen(true)} className="mt-4 btn-poster">✨ Generate my story</button>
-
-      {gen && (
-        <div className="mt-6 border-[3px] border-[var(--mustard)] bg-[var(--cream)] p-5 text-[var(--ink)]">
-          <div className="font-[family-name:var(--font-hand)] text-2xl leading-tight text-[var(--hotpink)]">
-            Kolkata, 4 days, ₹3,120 spent.
-          </div>
-          <p className="mt-3 text-sm leading-relaxed">
-            You got off at Howrah before sunrise. A tram woke you up before your alarm did. The
-            Victoria Memorial in the rain was smaller than the photos said, and much bigger than
-            you expected. You paid 15 rupees too much for a rickshaw and 15 rupees too little for
-            a fish thali — and both felt like winning. On the last night, someone on College Street
-            handed you a book you didn't ask for. You brought it home.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <StampTag>#kolkata</StampTag>
-            <StampTag tone="pink">#soloTrip</StampTag>
-            <StampTag tone="dusk">#underBudget</StampTag>
-          </div>
+    <div className="poster-card grain p-5 sm:p-7 bg-[var(--dusk)] text-[var(--cream)] flex flex-col justify-between h-full">
+      <div>
+        <div className="flex items-center justify-between">
+          <span className="chip !bg-[var(--mustard)]">Demo 04</span>
+          <span className="font-[family-name:var(--font-heavy)] text-xs uppercase tracking-widest">Trip Postcard Memory</span>
         </div>
-      )}
+        <h3 className="mt-3 font-[family-name:var(--font-display)] text-4xl">A postcard from your trip.</h3>
+        <p className="mt-2 text-[var(--cream)]/85 text-sm">Photos, expenses, and notes stitched into a story worth keeping. Tap day cards to view detail logs.</p>
+        <button onClick={() => setGen(true)} className="mt-4 btn-poster">✨ Generate my story</button>
+
+        {gen && (
+          <div className="mt-6 border-[3px] border-[var(--mustard)] bg-[var(--cream)] p-5 text-[var(--ink)]">
+            <div className="font-[family-name:var(--font-hand)] text-2xl leading-tight text-[var(--hotpink)]">
+              Kolkata, 4 days, ₹3,120 spent.
+            </div>
+            <p className="mt-3 text-xs leading-relaxed">
+              You got off at Howrah before sunrise. A tram woke you up before your alarm did. The
+              Victoria Memorial in the rain was smaller than the photos said, and much bigger than
+              you expected. You paid 15 rupees too much for a rickshaw and 15 rupees too little for
+              a fish thali — and both felt like winning.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <StampTag>#kolkata</StampTag>
+              <StampTag tone="pink">#soloTrip</StampTag>
+              <StampTag tone="dusk">#underBudget</StampTag>
+            </div>
+          </div>
+        )}
+      </div>
+      <Link to="/trip-story" className="mt-6 btn-poster w-full justify-center text-xs">
+        🌅 Open Interactive Day Cards →
+      </Link>
     </div>
   );
 }
