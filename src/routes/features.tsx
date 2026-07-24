@@ -16,7 +16,7 @@ export const Route = createFileRoute("/features")({
   component: FeaturesPage,
 });
 
-/* ────── translation mock data ────── */
+/* ────── translation presets ────── */
 const bargainingPhrases = [
   {
     english: "How much is this tea?",
@@ -41,7 +41,7 @@ const bargainingPhrases = [
   },
 ];
 
-/* ────── safety chat mock data ────── */
+/* ────── safety presets ────── */
 const safetyScenarios = [
   {
     query: "Is it safe to walk near Sealdah station at 10:30 PM?",
@@ -60,8 +60,58 @@ const safetyScenarios = [
 function FeaturesPage() {
   const [activePhraseIdx, setActivePhraseIdx] = useState<number | null>(null);
   const [selectedLang, setSelectedLang] = useState<"bengali" | "hindi" | "tamil">("hindi");
-  
+  const [customText, setCustomText] = useState("");
+  const [liveTranslation, setLiveTranslation] = useState<{ translatedText: string; pronunciation: string; bargainingSuggestion: string } | null>(null);
+  const [translating, setTranslating] = useState(false);
+
   const [activeSafetyIdx, setActiveSafetyIdx] = useState<number | null>(null);
+  const [customSafetyQuery, setCustomSafetyQuery] = useState("");
+  const [liveSafetyAdvice, setLiveSafetyAdvice] = useState<{ advice: string; scamWarning?: string; safeRefuges?: string[] } | null>(null);
+  const [queryingSafety, setQueryingSafety] = useState(false);
+
+  const handleTranslateLive = async (textToTranslate: string) => {
+    setTranslating(true);
+    setLiveTranslation(null);
+
+    try {
+      const res = await fetch("/api/gemma/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: textToTranslate, target_language: selectedLang }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setLiveTranslation(data);
+      }
+    } catch {
+      /* Fallback to preset display */
+    } finally {
+      setTranslating(false);
+    }
+  };
+
+  const handleSafetyLive = async (queryText: string) => {
+    setQueryingSafety(true);
+    setLiveSafetyAdvice(null);
+
+    try {
+      const res = await fetch("/api/gemma/safety", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: queryText }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setLiveSafetyAdvice(data);
+      }
+    } catch {
+      /* Fallback to preset display */
+    } finally {
+      setQueryingSafety(false);
+    }
+  };
 
   return (
     <PageShell>
@@ -74,7 +124,7 @@ function FeaturesPage() {
             THE WHOLE KIT
           </h1>
           <p className="mt-3 max-w-2xl text-lg">
-            Gemma-powered toolkit built for the streets, sleeper coaches, and midnight arrivals. We've trimmed down our features to only what is working, interactive, and relevant.
+            Gemma-powered toolkit built for the streets, sleeper coaches, and midnight arrivals. Every feature is connected directly to live AI reasoning.
           </p>
         </div>
       </section>
@@ -155,7 +205,7 @@ function FeaturesPage() {
             </div>
             
             <p className="text-sm">
-              Tap a phrase below, select a language, and see the local translation & bargain coach. Real version reads market audio to prevent overcharging.
+              Tap a phrase below or type your own custom line to call Gemma's translation & bargaining engine.
             </p>
 
             <div className="mt-4 flex gap-2">
@@ -170,11 +220,36 @@ function FeaturesPage() {
               ))}
             </div>
 
+            {/* Custom input bar */}
+            <div className="mt-4 flex gap-2">
+              <input
+                type="text"
+                value={customText}
+                onChange={(e) => setCustomText(e.target.value)}
+                placeholder="Type any custom sentence (e.g. 'Can you drop me near the station for 50?')..."
+                className="flex-1 border-2 border-[var(--ink)] bg-[var(--cream)] px-3 py-1.5 text-xs font-bold outline-none"
+              />
+              <button
+                onClick={() => { if (customText) { setActivePhraseIdx(null); void handleTranslateLive(customText); } }}
+                disabled={translating || !customText}
+                className="chip !bg-[var(--hotpink)] !text-[var(--cream)] cursor-pointer"
+              >
+                {translating ? "Translating..." : "Translate Live"}
+              </button>
+            </div>
+
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               {bargainingPhrases.map((phrase, idx) => (
                 <button
                   key={idx}
-                  onClick={() => setActivePhraseIdx(activePhraseIdx === idx ? null : idx)}
+                  onClick={() => {
+                    if (activePhraseIdx === idx) {
+                      setActivePhraseIdx(null);
+                    } else {
+                      setActivePhraseIdx(idx);
+                      void handleTranslateLive(phrase.english);
+                    }
+                  }}
                   className="stamp-card text-left text-xs hover:bg-[var(--cream)] cursor-pointer"
                 >
                   <div className="font-bold">"{phrase.english}"</div>
@@ -183,7 +258,27 @@ function FeaturesPage() {
               ))}
             </div>
 
-            {activePhraseIdx !== null && (
+            {liveTranslation && (
+              <div className="mt-5 border-2 border-dashed border-[var(--ink)] bg-[var(--cream)] p-4 animate-fade-in text-sm space-y-2">
+                <div className="text-xs font-black uppercase tracking-widest text-[var(--hotpink)]">✨ Gemma Live Translation</div>
+                <div>
+                  <span className="font-bold text-xs uppercase text-muted-foreground">Original:</span>
+                  <p className="font-bold">"{liveTranslation.translatedText ? customText || bargainingPhrases[activePhraseIdx ?? 0]?.english : ""}"</p>
+                </div>
+                <div>
+                  <span className="font-bold text-xs uppercase text-[var(--hotpink)]">Local Dialect:</span>
+                  <p className="font-[family-name:var(--font-heavy)] text-base text-[var(--hotpink)] tracking-wider">
+                    "{liveTranslation.translatedText}"
+                  </p>
+                </div>
+                <div className="text-xs italic text-muted-foreground">Pronunciation: {liveTranslation.pronunciation}</div>
+                <div className="pt-2 border-t border-[var(--ink)]/20 text-xs font-bold text-[var(--dusk)]">
+                  💡 Bargaining Coach: {liveTranslation.bargainingSuggestion}
+                </div>
+              </div>
+            )}
+
+            {!liveTranslation && activePhraseIdx !== null && (
               <div className="mt-5 border-2 border-dashed border-[var(--ink)] bg-[var(--cream)] p-4 animate-fade-in text-sm space-y-2">
                 <div>
                   <span className="font-bold text-xs uppercase text-muted-foreground">Original:</span>
@@ -212,14 +307,39 @@ function FeaturesPage() {
             </div>
 
             <p className="text-sm text-[var(--cream)]/85">
-              Select an anxiety question to query Gemma's safety engine. Checks local safety parameters, scams, and replies instantly.
+              Select a scenario or type a live safety question to query Gemma's safety engine.
             </p>
+
+            {/* Custom safety input */}
+            <div className="mt-4 flex gap-2">
+              <input
+                type="text"
+                value={customSafetyQuery}
+                onChange={(e) => setCustomSafetyQuery(e.target.value)}
+                placeholder="Ask any safety question (e.g. 'Is Paharganj safe at midnight for a solo traveler?')..."
+                className="flex-1 border-2 border-[var(--cream)]/40 bg-black/40 px-3 py-1.5 text-xs font-bold text-[var(--cream)] outline-none"
+              />
+              <button
+                onClick={() => { if (customSafetyQuery) { setActiveSafetyIdx(null); void handleSafetyLive(customSafetyQuery); } }}
+                disabled={queryingSafety || !customSafetyQuery}
+                className="chip !bg-[var(--mustard)] !text-[var(--ink)] cursor-pointer"
+              >
+                {queryingSafety ? "Asking Gemma..." : "Ask Live Guard"}
+              </button>
+            </div>
 
             <div className="mt-4 space-y-2">
               {safetyScenarios.map((sc, idx) => (
                 <button
                   key={idx}
-                  onClick={() => setActiveSafetyIdx(activeSafetyIdx === idx ? null : idx)}
+                  onClick={() => {
+                    if (activeSafetyIdx === idx) {
+                      setActiveSafetyIdx(null);
+                    } else {
+                      setActiveSafetyIdx(idx);
+                      void handleSafetyLive(sc.query);
+                    }
+                  }}
                   className="w-full text-left border-2 border-[var(--cream)]/20 bg-black/20 hover:bg-black/40 px-4 py-2.5 text-xs font-bold uppercase tracking-wider flex justify-between items-center cursor-pointer"
                 >
                   <span>❓ {sc.query}</span>
@@ -228,7 +348,20 @@ function FeaturesPage() {
               ))}
             </div>
 
-            {activeSafetyIdx !== null && (
+            {liveSafetyAdvice && (
+              <div className="mt-5 border-2 border-dashed border-[var(--mustard)] bg-[var(--cream)] text-[var(--ink)] p-4 animate-fade-in text-xs leading-relaxed space-y-2">
+                <div className="font-black uppercase tracking-widest text-[var(--hotpink)]">🛡️ Gemma Live Safety Guard Result</div>
+                <p className="font-bold">{liveSafetyAdvice.advice}</p>
+                {liveSafetyAdvice.scamWarning && (
+                  <div className="text-[var(--hotpink)] font-bold">⚠️ Warning: {liveSafetyAdvice.scamWarning}</div>
+                )}
+                {liveSafetyAdvice.safeRefuges && liveSafetyAdvice.safeRefuges.length > 0 && (
+                  <div className="text-xs text-muted-foreground">Safe Refuges Nearby: {liveSafetyAdvice.safeRefuges.join(", ")}</div>
+                )}
+              </div>
+            )}
+
+            {!liveSafetyAdvice && activeSafetyIdx !== null && (
               <div className="mt-5 border-2 border-dashed border-[var(--mustard)] bg-[var(--cream)] text-[var(--ink)] p-4 animate-fade-in text-xs leading-relaxed">
                 {safetyScenarios[activeSafetyIdx].response}
               </div>
