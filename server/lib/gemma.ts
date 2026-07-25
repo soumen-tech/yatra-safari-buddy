@@ -7,8 +7,8 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const GOOGLE_MODEL = "gemma-2-9b-it"; // Gemma model
-const GROQ_MODEL = "gemma2-9b-it";
+const GOOGLE_MODEL = "gemma-4-31b-it"; // Google Gemma 4 flagship model
+const GROQ_MODEL = "gemma2-9b-it"; // Groq fallback (Gemma 4 not yet supported on Groq)
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 export interface GemmaError {

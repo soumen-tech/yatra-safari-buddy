@@ -10,8 +10,8 @@
 - **Backend Runtime:** Nitro SSR Engine (Cloudflare Workers / Node.js)
 - **Database & Storage:** Supabase Postgres + Row Level Security + Storage Buckets
 - **Realtime Sync:** Supabase Realtime Channels
-- **AI Core (Primary):** Google AI Gemma 4 (`gemma-2-9b-it`) via official `@google/generative-ai` SDK
-- **AI Fallback:** Groq free tier (`gemma2-9b-it`) for rate-limit failover
+- **AI Core (Primary):** Google AI Gemma 4 (`gemma-4-31b-it`) via official `@google/generative-ai` SDK
+- **AI Fallback:** Groq free tier (`gemma2-9b-it`) for rate-limit failover (Gemma 4 fallback pending Groq availability)
 
 ---
 
